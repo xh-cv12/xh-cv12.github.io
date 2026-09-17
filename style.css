@@ -81,8 +81,25 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(120deg, var(--brand), #a855f7 60%, #ec4899);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.hero-sub { color: var(--text-soft); font-size: 15px; margin-bottom: 28px; }
+.hero-sub { color: var(--text-soft); font-size: 15px; margin-bottom: 20px; }
 .hero-sub b { color: var(--brand); }
+
+/* 板块切换 Tab */
+.tabs {
+  display: inline-flex; gap: 4px; padding: 4px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px;
+}
+.tab {
+  padding: 8px 20px; border: none; border-radius: 9px; cursor: pointer;
+  background: transparent; color: var(--text-soft);
+  font-size: 14px; font-weight: 600; transition: all .18s;
+}
+.tab:hover { color: var(--brand); }
+.tab.active {
+  background: var(--brand); color: #fff;
+  box-shadow: 0 2px 8px rgba(91,91,214,.28);
+}
 
 /* 搜索框 */
 .search-box {
@@ -171,6 +188,16 @@ body.dark .badge.free { background: #10331f; color: #4ade80; }
 .badge.paid  { background: #fff1e8; color: #c2410c; }
 body.dark .badge.paid { background: #3a1d0d; color: #fb923c; }
 
+/* 资讯卡片的平台标签：各类型一个颜色 */
+.badge.wx    { background: #e8f7ee; color: #10794a; }
+body.dark .badge.wx { background: #123324; color: #4ade80; }
+.badge.mail  { background: #eef2ff; color: #4338ca; }
+body.dark .badge.mail { background: #1e2445; color: #a5b4fc; }
+.badge.forum { background: #fdf2f8; color: #be185d; }
+body.dark .badge.forum { background: #3b1230; color: #f9a8d4; }
+.badge.site  { background: #fff1e8; color: #c2410c; }
+body.dark .badge.site { background: #3a1d0d; color: #fb923c; }
+
 .card-desc {
   font-size: 13.5px; color: var(--text-soft);
   flex: 1;   /* 让描述撑开，卡片底部对齐 */
@@ -183,8 +210,22 @@ body.dark .badge.paid { background: #3a1d0d; color: #fb923c; }
   border: 1px solid var(--border);
 }
 
+/* 更新频率标签，视觉上和其他标签区分开 */
+.tag.freq { background: var(--brand-soft); color: var(--brand); border-color: transparent; font-weight: 600; }
+
+/* 资讯卡片底部：左侧链接，右侧公众号 ID */
+.card-foot {
+  margin-top: 4px; display: flex; align-items: center;
+  justify-content: space-between; gap: 8px;
+}
+.wx-id {
+  font-size: 11px; color: var(--text-soft);
+  background: var(--bg); border: 1px dashed var(--border);
+  border-radius: 6px; padding: 2px 7px; white-space: nowrap;
+}
+
 .card-link {
-  margin-top: 4px; font-size: 13px; font-weight: 600; color: var(--brand);
+  font-size: 13px; font-weight: 600; color: var(--brand);
   display: inline-flex; align-items: center; gap: 4px;
 }
 .card-link:hover { gap: 8px; }

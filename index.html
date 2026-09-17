@@ -12,9 +12,9 @@
   <meta charset="UTF-8">
   <!-- 这行决定手机端能不能正常缩放，删掉的话手机上字会小到看不清 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 这里的内容会显示在浏览器标签页上，也会被搜索引擎收录，记得改 -->
-  <title>AI 工具导航 · 一站找齐好用的 AI</title>
-  <meta name="description" content="精选 40+ 款 AI 工具，支持按名称、功能、标签实时检索，覆盖对话、绘图、视频、编程、办公等场景。">
+  <!-- 这里的内容会显示在浏览器标签页上，也会被搜索引擎收录 -->
+  <title>AI 工具导航 · 120 款工具 + 30 个资讯源</title>
+  <meta name="description" content="精选 120 款 AI 工具与 30 个 AI 资讯信息源，支持实时检索，覆盖对话、绘图、视频、编程、办公与学习资源。">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,10 +30,18 @@
     </div>
   </header>
 
-  <!-- ===== 头部大图区域 ===== -->
+  <!-- ===== 头部区域 ===== -->
   <section class="hero">
     <h1 class="hero-title">找 AI 工具，别再靠收藏夹</h1>
-    <p class="hero-sub">精选 <b id="totalCount">0</b> 款实用 AI 工具，输入关键词即刻检索</p>
+    <p class="hero-sub">
+      收录 <b id="totalTools">0</b> 款工具 · <b id="totalArticles">0</b> 个资讯源
+    </p>
+
+    <!-- 两个板块的切换 Tab -->
+    <div class="tabs">
+      <button class="tab active" data-tab="tools">🔧 AI 工具</button>
+      <button class="tab" data-tab="articles">📰 资讯 & 学习</button>
+    </div>
 
     <!-- 搜索框：核心功能 -->
     <div class="search-box">
@@ -50,26 +58,25 @@
     <div id="categoryBar" class="category-bar"></div>
   </section>
 
-  <!-- ===== 工具卡片区 ===== -->
+  <!-- ===== 卡片区（工具 / 资讯共用） ===== -->
   <main class="container">
     <div class="result-bar">
       <span id="resultInfo">正在加载…</span>
     </div>
 
-    <!-- 卡片容器，由 app.js 动态填内容 -->
     <div id="grid" class="grid"></div>
 
     <!-- 搜不到东西时显示的提示，默认隐藏 -->
     <div id="empty" class="empty" hidden>
       <div class="empty-icon">🫥</div>
-      <p>没找到相关工具</p>
-      <p class="empty-tip">换个关键词试试，或者点「全部」看看所有工具</p>
+      <p>没找到相关内容</p>
+      <p class="empty-tip">换个关键词试试，或者点「全部」看看所有内容</p>
     </div>
   </main>
 
   <!-- ===== 页脚 ===== -->
   <footer class="footer">
-    <p>工具数据仅作整理分享，版权归各产品官方所有</p>
+    <p>工具与资讯源仅作整理分享，版权归各产品与媒体官方所有</p>
     <p class="footer-tip">最后更新：2026 年 9 月 · 本站由 HTML + CSS + JavaScript 手写而成</p>
   </footer>
 
@@ -78,6 +85,7 @@
 
   <!-- 引入 JS：顺序不能反，数据要先用，逻辑后跑 -->
   <script src="tools.js"></script>
+  <script src="articles.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

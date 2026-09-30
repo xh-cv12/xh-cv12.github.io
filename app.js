@@ -15,18 +15,59 @@ const resultInfo  = document.getElementById('resultInfo');
 const emptyBox    = document.getElementById('empty');
 const themeBtn    = document.getElementById('themeBtn');
 const topBtn      = document.getElementById('topBtn');
-const tabsBox     = document.querySelector('.tabs');
+const tabsBox     = document.querySelector('.hero .tabs');
+const overrideTip = document.getElementById('overrideTip');
 
 // 当前状态：看哪个板块 + 搜什么词 + 选哪个分类
 let curTab   = 'tools';   // 'tools' 工具 | 'articles' 资讯
 let keyword  = '';
 let curCat   = '全部';
 
+// 后台改动存在 localStorage 的键名（要和 admin.js 里保持一致）
+const KEY_TOOLS    = 'admin_tools';
+const KEY_ARTICLES = 'admin_articles';
+
+/**
+ * 后台在浏览器里改过数据，就优先用改动后的版本；
+ * 没改过就用 tools.js / articles.js 里的原始数据。
+ */
+function loadOverride(base, key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return base;
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : base;
+  } catch (e) {
+    console.warn('读取本地改动失败，使用原始数据', e);
+    return base;
+  }
+}
+
+const TOOLS_V2    = loadOverride(TOOLS, KEY_TOOLS);
+const ARTICLES_V2 = loadOverride(ARTICLES, KEY_ARTICLES);
+const HAS_OVERRIDE = localStorage.getItem(KEY_TOOLS) || localStorage.getItem(KEY_ARTICLES);
+
+/**
+ * 分类按钮 = 文件里声明的分类 + 数据里实际出现的分类
+ * 这样后台新增了自定义分类，首页也能自动显示出来
+ */
+function buildCats(declared, list) {
+  const out = [];
+  const push = c => { if (c && !out.includes(c)) out.push(c); };
+  push('全部');
+  declared.forEach(c => push(c));      // push 内部会跳过重复的「全部」
+  list.forEach(i => push(i.cat));      // 补充后台新增的分类
+  return out;
+}
+
 /** 根据当前板块，取对应的数据、分类和单位词 */
 function getData() {
-  return curTab === 'tools'
-    ? { list: TOOLS,      cats: CATEGORIES,    unit: '个工具'   }
-    : { list: ARTICLES,   cats: ARTICLE_CATS,  unit: '个资讯源' };
+  if (curTab === 'tools') {
+    const list = TOOLS_V2;
+    return { list, cats: buildCats(CATEGORIES, list), unit: '个工具' };
+  }
+  const list = ARTICLES_V2;
+  return { list, cats: buildCats(ARTICLE_CATS, list), unit: '个资讯源' };
 }
 
 // ---------- 2. 小工具函数 ----------
@@ -76,6 +117,8 @@ function platformClass(p) {
 // ---------- 3. 生成分类按钮 ----------
 function renderCategories() {
   const { cats } = getData();
+  // 如果当前选中的分类已经被删光了，就退回「全部」
+  if (!cats.includes(curCat)) curCat = '全部';
   categoryBar.innerHTML = cats.map(cat =>
     `<button class="chip ${cat === curCat ? 'active' : ''}" data-cat="${cat}">${cat}</button>`
   ).join('');
@@ -151,7 +194,7 @@ function toolCard(t, kw) {
       </div>
       <p class="card-desc">${highlight(t.desc, kw)}</p>
       <div class="tags">
-        ${t.tags.map(x => `<span class="tag">${highlight(x, kw)}</span>`).join('')}
+        ${(t.tags || []).map(x => `<span class="tag">${highlight(x, kw)}</span>`).join('')}
       </div>
       <span class="card-link">立即访问 →</span>
     </a>`;
@@ -173,7 +216,7 @@ function articleCard(a, kw) {
       <p class="card-desc">${highlight(a.desc, kw)}</p>
       <div class="tags">
         <span class="tag freq">🔔 ${highlight(a.freq, kw)}</span>
-        ${a.tags.map(x => `<span class="tag">${highlight(x, kw)}</span>`).join('')}
+        ${(a.tags || []).map(x => `<span class="tag">${highlight(x, kw)}</span>`).join('')}
       </div>
       <div class="card-foot">
         <span class="card-link">${a.wx ? '去关注 →' : '去阅读 →'}</span>
@@ -219,6 +262,7 @@ clearBtn.addEventListener('click', () => {
 });
 
 // 快捷键：/ 聚焦搜索框，Esc 退出
+// Ctrl + Shift + A 打开后台
 document.addEventListener('keydown', e => {
   if (e.key === '/' && document.activeElement !== searchInput) {
     e.preventDefault();
@@ -226,6 +270,10 @@ document.addEventListener('keydown', e => {
   }
   if (e.key === 'Escape' && document.activeElement === searchInput) {
     searchInput.blur();
+  }
+  if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    location.href = 'admin.html';
   }
 });
 
@@ -250,8 +298,9 @@ function init() {
     document.body.classList.add('dark');
     themeBtn.textContent = '☀️';
   }
-  document.getElementById('totalTools').textContent    = TOOLS.length;
-  document.getElementById('totalArticles').textContent = ARTICLES.length;
+  document.getElementById('totalTools').textContent    = TOOLS_V2.length;
+  document.getElementById('totalArticles').textContent = ARTICLES_V2.length;
+  if (HAS_OVERRIDE) overrideTip.hidden = false;
   renderCategories();
   update();
 }

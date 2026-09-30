@@ -30,6 +30,12 @@
     </div>
   </header>
 
+  <!-- 后台改过数据时显示这条提示，默认隐藏 -->
+  <div id="overrideTip" class="override-tip" hidden>
+    <span>⚙️ 当前显示的是<b>本地修改版</b>，只有你自己的浏览器能看到</span>
+    <a href="admin.html">去后台</a>
+  </div>
+
   <!-- ===== 头部区域 ===== -->
   <section class="hero">
     <h1 class="hero-title">找 AI 工具，别再靠收藏夹</h1>
@@ -78,6 +84,8 @@
   <footer class="footer">
     <p>工具与资讯源仅作整理分享，版权归各产品与媒体官方所有</p>
     <p class="footer-tip">最后更新：2026 年 9 月 · 本站由 HTML + CSS + JavaScript 手写而成</p>
+    <!-- 后台入口：做成很淡的图标，正常访客基本注意不到 -->
+    <a href="admin.html" class="admin-entry" title="管理">⚙</a>
   </footer>
 
   <!-- 回到顶部按钮 -->

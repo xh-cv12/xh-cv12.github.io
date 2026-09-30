@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  admin.html —— 后台管理面板
+  入口：首页页脚的 ⚙ 图标，或在首页按 Ctrl + Shift + A
+  ⚠️ 密码写在前端 JS 里，懂技术的人看源码就能绕开。
+     它只是防止误触，不是安全措施——真正的静态站没有后端。
+  ============================================================
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台管理 · AI 工具导航</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ===== 登录遮罩 ===== -->
+<div id="loginMask" class="mask">
+  <form id="loginForm" class="login-box">
+    <div class="login-icon">🔒</div>
+    <h2>后台管理</h2>
+    <p class="login-sub">请输入管理密码</p>
+    <input id="pwdInput" type="password" placeholder="密码" autocomplete="off" autofocus>
+    <button type="submit" class="btn primary block">进 入</button>
+    <p id="loginErr" class="login-err" hidden>密码不对，再试一次</p>
+    <a href="index.html" class="login-back">← 返回网站</a>
+    <p class="login-note">
+      提示：静态网页没有真正的后端，这个密码只防误触，
+      不防懂技术的人。别用它保护真正的敏感内容。
+    </p>
+  </form>
+</div>
+
+<!-- ===== 管理面板 ===== -->
+<div id="panel" class="panel" hidden>
+
+  <header class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <div class="admin-brand">
+        <span class="logo-mark">AI</span>
+        <span>后台管理</span>
+      </div>
+      <div class="admin-actions">
+        <a href="index.html" class="btn ghost" target="_blank">查看网站 ↗</a>
+        <button id="logoutBtn" class="btn ghost">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 本地修改提示 -->
+  <div class="notice-bar">
+    <span>💡 改动只保存在<b>这台电脑的浏览器</b>里。要让它对所有访客生效，需点「导出代码」并把文件上传到 GitHub。</span>
+  </div>
+
+  <main class="admin-main">
+
+    <!-- 板块切换 + 操作按钮 -->
+    <div class="admin-toolbar">
+      <div class="tabs">
+        <button class="tab active" data-tab="tools">🔧 AI 工具</button>
+        <button class="tab" data-tab="articles">📰 资讯源</button>
+      </div>
+      <div class="toolbar-right">
+        <input id="adminSearch" type="text" placeholder="搜索名称或分类…" class="admin-search">
+        <button id="addBtn" class="btn primary">＋ 新增</button>
+        <button id="exportBtn" class="btn">导出代码</button>
+        <button id="resetBtn" class="btn danger-ghost">恢复默认</button>
+      </div>
+    </div>
+
+    <div class="admin-stat">
+      <span id="statText">—</span>
+    </div>
+
+    <!-- 数据列表 -->
+    <div id="list" class="admin-list"></div>
+
+    <div id="adminEmpty" class="empty" hidden>
+      <div class="empty-icon">🫥</div>
+      <p>没有匹配的内容</p>
+    </div>
+  </main>
+</div>
+
+<!-- ===== 新增 / 编辑 表单 ===== -->
+<div id="formMask" class="mask" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="formTitle">新增</h3>
+      <button class="modal-close" data-close="formMask">✕</button>
+    </div>
+    <form id="itemForm" class="modal-body">
+      <label>名称 <b>*</b>
+        <input name="name" required placeholder="例如：ChatGPT">
+      </label>
+      <label>简介 <b>*</b>
+        <input name="desc" required placeholder="一句话说明它能干什么">
+      </label>
+      <div class="form-row">
+        <label>分类 <b>*</b>
+          <input name="cat" list="catList" required placeholder="选一个或自己输入">
+          <datalist id="catList"></datalist>
+        </label>
+        <label id="priceWrap">收费
+          <select name="price">
+            <option value="免费">免费</option>
+            <option value="免费+付费">免费+付费</option>
+            <option value="付费">付费</option>
+          </select>
+        </label>
+        <label id="platformWrap" hidden>平台
+          <select name="platform">
+            <option value="公众号">公众号</option>
+            <option value="网站">网站</option>
+            <option value="邮件订阅">邮件订阅</option>
+            <option value="社区">社区</option>
+          </select>
+        </label>
+        <label id="freqWrap" hidden>更新频率
+          <input name="freq" value="日更" placeholder="日更 / 周更 / 不定期">
+        </label>
+        <label id="wxWrap" hidden>公众号 ID
+          <input name="wx" placeholder="选填，如 QbitAI">
+        </label>
+      </div>
+      <label>标签
+        <input name="tags" placeholder="用逗号分隔，如：绘画,开源,国产">
+      </label>
+      <label>链接 <b>*</b>
+        <input name="url" required placeholder="https://">
+      </label>
+      <div class="modal-foot">
+        <button type="button" class="btn ghost" data-close="formMask">取消</button>
+        <button type="submit" class="btn primary">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== 导出代码 ===== -->
+<div id="exportMask" class="mask" hidden>
+  <div class="modal wide">
+    <div class="modal-head">
+      <h3>导出代码</h3>
+      <button class="modal-close" data-close="exportMask">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="export-tip">
+        把下面内容分别保存成 <code>tools.js</code> 和 <code>articles.js</code>，
+        上传到 GitHub 覆盖原文件，改动就对所有人生效了。
+      </p>
+      <div class="export-switch">
+        <button class="tab active" data-file="tools">tools.js</button>
+        <button class="tab" data-file="articles">articles.js</button>
+      </div>
+      <textarea id="exportArea" class="export-area" readonly spellcheck="false"></textarea>
+      <div class="modal-foot">
+        <button id="copyBtn" class="btn">复制</button>
+        <button id="downloadBtn" class="btn">下载当前文件</button>
+        <button class="btn ghost" data-close="exportMask">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="tools.js"></script>
+<script src="articles.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

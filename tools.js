@@ -1,5 +1,5 @@
 /* ============================================================
- * tools.js —— 工具数据（120 款）
+ * tools.js —— 工具数据（121 款）
  * ------------------------------------------------------------
  * 加工具就在对应分类下抄一条改内容：
  *
@@ -74,7 +74,7 @@ const TOOLS = [
   { name: "腾讯智影", desc: "腾讯出品的视频创作平台，数字人与智能剪辑一体", cat: "视频生成", tags: ["数字人","剪辑","国产","腾讯"], url: "https://zenvideo.qq.com", price: "免费+付费" },
   { name: "剪映", desc: "国民级剪辑工具，AI 成片、智能字幕大幅提速", cat: "视频生成", tags: ["剪辑","字幕","国产","抖音"], url: "https://www.capcut.cn", price: "免费+付费" },
 
-  // ============ 编程开发 14 ============
+  // ============ 编程开发 15 ============
   { name: "GitHub Copilot", desc: "VS Code 中最成熟的 AI 补全，写代码的老搭档", cat: "编程开发", tags: ["代码","补全","IDE"], url: "https://github.com/features/copilot", price: "付费" },
   { name: "Cursor", desc: "AI 原生编辑器，能直接改整个项目，写代码效率高", cat: "编程开发", tags: ["代码","编辑器","IDE"], url: "https://cursor.com", price: "免费+付费" },
   { name: "Trae", desc: "字节出品的免费 AI 编程工具，中文体验好", cat: "编程开发", tags: ["代码","编辑器","国产"], url: "https://www.trae.ai", price: "免费" },
@@ -89,6 +89,8 @@ const TOOLS = [
   { name: "Cognition", desc: "Devin 背后的公司，主打自主完成工程任务的 AI 工程师", cat: "编程开发", tags: ["Agent","代码","自动化"], url: "https://cognition.ai", price: "付费" },
   { name: "Zed", desc: "高性能代码编辑器，启动极快，内置 AI 协作", cat: "编程开发", tags: ["编辑器","性能","协作"], url: "https://zed.dev", price: "免费+付费" },
   { name: "Augment Code", desc: "面向大型代码库的 AI 助手，索引能力强，企业级", cat: "编程开发", tags: ["代码","大项目","企业级"], url: "https://www.augmentcode.com", price: "免费+付费" },
+
+  { name: "agent-qa", desc: "自然语言 Web/移动测试，memidex 记忆与经验证的自我改进；FSL-1.1-ALv2 限制竞争性商用，模型/设备另计费。", cat: "编程开发", tags: ["QA", "Android/iOS", "Node.js 24+", "早期项目"], url: "https://vostride.com", price: "免费" },
 
   // ============ 写作办公 12 ============
   { name: "Notion AI", desc: "在笔记里直接改写、总结、翻译，知识管理首选", cat: "写作办公", tags: ["笔记","写作","总结"], url: "https://www.notion.so/product/ai", price: "付费" },
